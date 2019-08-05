@@ -100,9 +100,9 @@ insertLine:
 putch: ;(chr -- )
     push r0
     push r1
-    dpop r1
-    mov r0, [bufptr]
-    mov [r0], r1
+    dpop r0
+    mov r1, [bufptr]
+    mov [r1], r0
     mov r0, bufptr
     add [r0], 1
     pop r1
@@ -111,24 +111,41 @@ putch: ;(chr -- )
 
 ;prints a null terminated string
 prints: ; (str -- )
-    dpush [bufptr]
-    call prints_internal
-    dpop [bufptr]
-    ret
-
-;writes given string starting from ptr
-prints_internal: ; (str ptr -- [new ptr])
     push r0
     push r1
-    dpop r1 ;ptr
-    dpop r0 ;str
+    push r2
 
+    dpop r0 ;str
+    
     .loop:
-        add [r1++], [r0++], 0
-        jnz .loop
+        mov r1, [r0++]
+
+        cmp r1, 10
+        jne ..not_newline
+            call newline
+            jmp ..loop_cont
+        ..not_newline:
+        cmp r1, 9
+        jne ..not_tabulator
+            dpush ' '
+            call dup
+            call putch
+            call putch
+            jmp ..loop_cont
+        ..not_tabulator:
+
+        mov r2, [bufptr]
+        mov [r2], r1
+
+        mov r1, 1
+        add [bufptr], r1
+
+        ..loop_cont:
+        cmp [r0], 0
+        jne .loop
+
     .return:
-        sub r1, 1
-        dpush r1
+        pop r2
         pop r1
         pop r0
         ret

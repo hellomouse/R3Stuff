@@ -14,6 +14,8 @@ data:
 		dw "ui id massa aliq"
 		dw "uet molestie idv"
 		dw "ehicula justo.  " ;128
+	.ctrl_char_test:
+		dw "Hello, ", 10, 9, "world!", 0
 main:
 	.init:
 		mov sp, 0x0800
@@ -23,12 +25,8 @@ main:
 		jmp main.prog
 
 	.prog:
-
-		_memcpy _printbuffer, data.str, 128
-		call copyBuffer
-		hlt
-		call insertLine
-		call copyBuffer
+		dpush data.ctrl_char_test
+		call prints
 
 		jmp main.return
 

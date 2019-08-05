@@ -9,7 +9,7 @@
 %include "datastack.asm"
 %include "heap.asm"
 
-%macro _memcpy dst src length
+%macro _memcpy dst, src, length
     dpush dst
     dpush src
     dpush length
