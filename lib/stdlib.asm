@@ -31,7 +31,7 @@
 %define _modeAddr 0x1D01
 %define _kbAddr 0x1F00
 
-%define _doublebuffer
+;%define _doublebuffer
 
 %ifdef _doublebuffer
 backbuffer:
