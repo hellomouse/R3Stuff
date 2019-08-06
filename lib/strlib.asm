@@ -266,22 +266,33 @@ strncpy: ;(strd strs len -- )
     push r1
     push r2
     push r3
+    push r4
 
     dpop r2 ;len
     dpop r1 ;strs
     dpop r0 ;strd
+    mov r4, 0
 
     loop r3, r2, .loop, .done
     .loop:
+
         mov [r0++], [r1++]
 
         cmp [r1], 0
         jne ..not_zero
             mov r3, lc
-            mov [r3], 0
+            mov [r3], 1 ;copy one last byte to null terminate
+            mov r4, 1   ;mark r3 with 1 to indicate loop ended due to a zero
         ..not_zero:
     .done:
 
+    cmp r4, 1
+    jne .terminated
+        sub r1, 1
+        mov [r1], 0 ;null term
+    .terminated:
+
+    pop r4
     pop r3
     pop r2
     pop r1
