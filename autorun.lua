@@ -1,4 +1,4 @@
-fps.set(600)
+fps.set(50)
 
 do
 	local mapped_read = {}

@@ -236,5 +236,55 @@ strlen: ; (str -- length)
     pop r0
     ret
 
+;copies contents of strs into strd
+;use strncpy instead
+strcpy: ;(strd strs -- )
+    push r0
+    push r1
+
+    dpop r1
+    dpop r0
+
+    ;check if r1 is just a zero
+    cmp [r1], 0
+    je .return
+
+    .loop:
+        mov [r0++], [r1++]
+        cmp [r1], 0
+        jne .loop
+    mov [r0], 0
+
+    .return:
+        pop r1
+        pop r0
+        ret
+
+;copies contents of strs into strd without exceeding len
+strncpy: ;(strd strs len -- )
+    push r0
+    push r1
+    push r2
+    push r3
+
+    dpop r2 ;len
+    dpop r1 ;strs
+    dpop r0 ;strd
+
+    loop r3, r2, .loop, .done
+    .loop:
+        mov [r0++], [r1++]
+
+        cmp [r1], 0
+        jne ..not_zero
+            mov r3, lc
+            mov [r3], 0
+        ..not_zero:
+    .done:
+
+    pop r3
+    pop r2
+    pop r1
+    pop r0
 
 %endif

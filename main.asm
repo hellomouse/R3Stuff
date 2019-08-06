@@ -26,6 +26,13 @@ main:
 
 	.prog:
 		dpush data.ctrl_char_test
+		call strlen
+		dpop r0
+		_malloc r0
+		dpop r1
+		_memcpy r1, data.ctrl_char_test, r0
+		dpush r1
+		hlt
 		call prints
 
 		jmp main.return
